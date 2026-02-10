@@ -1,10 +1,22 @@
-import React from 'react'
+import { useContext, useState } from 'react'
 import Input from '../components/Input'
 import Btn from '../components/Btn'
-import { Link } from 'react-router-dom'
+import { QuizContext } from '../context/QuizContext'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 function Home() {
+    const [user, setUser] = useState("")
+    const navigate = useNavigate()
+    const { dispatch } = useContext(QuizContext)
+
+    const startQuiz = () => {
+        if (!user.trim())return alert(" please enter username")
+
+        dispatch({type:"SET_NAME",payload:user})
+        navigate('/quiz')
+    }
+
     return (
         <div className='container'>
             <div className='row p-3'>
@@ -13,12 +25,11 @@ function Home() {
                 </div>
             </div>
             <div className="row p-3">
-                <Input />
+                <Input name={user} setName={setUser} />
             </div>
             <div className="row p-3">
-                <Link to={'/quiz'}  >
-                    <Btn name={"Accecpted"} />
-                </Link>
+                <Btn btnName={"Accept"} onClick={startQuiz} />
+
             </div>
 
         </div>
