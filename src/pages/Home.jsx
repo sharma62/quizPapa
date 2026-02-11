@@ -3,17 +3,19 @@ import Input from '../components/Input'
 import Btn from '../components/Btn'
 import { QuizContext } from '../context/QuizContext'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTimer } from '../hooks/useTimer'
 
 
 function Home() {
     const [user, setUser] = useState("")
     const navigate = useNavigate()
     const { dispatch } = useContext(QuizContext)
+    const { time, reset } = useTimer()
 
     const startQuiz = () => {
-        if (!user.trim())return alert(" please enter username")
+        if (!user.trim()) return alert(" please enter Email")
 
-        dispatch({type:"SET_NAME",payload:user})
+        dispatch({ type: "SET_NAME", payload: user })
         navigate('/quiz')
     }
 

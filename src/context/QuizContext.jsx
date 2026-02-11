@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import question from '../data/questions.json'
 export const QuizContext = createContext()
 const initialState = {
@@ -8,10 +8,11 @@ const initialState = {
     completed: false,
     question: question
 }
+
 function quizReducer(state, action) {
     switch (action.type) {
         case "SET_NAME":
-            return { ...state, user: (action.payload.trim() ) }
+            return { ...state, user: (action.payload.trim()) }
         // ye payload dispatch ke via page send karta  hai
         case "ANSWER":
             return {
@@ -22,20 +23,33 @@ function quizReducer(state, action) {
         case "FINISH":
             return {
                 ...state,
-                completed:action.payload
-            } 
+                completed: action.payload
+            }
         case "RESET":
-             return {
+            return {
                 ...initialState,
-                question:state.question
-             }
+                question: state.question
+            }
         default:
             return state;
     }
-
 }
+
 export default function QuizProvider({ children }) {
-    const [state, dispatch] = useReducer(quizReducer, initialState)
+    //  Load state from localStorage first time
+    const savedData = JSON.parse(localStorage.getItem("quizStore"));
+
+    const [state, dispatch] = useReducer(
+        quizReducer,
+        savedData ? savedData : initialState
+    );
+
+
+    //  Save state whenever it changes
+    useEffect(() => {
+        localStorage.setItem("quizStore", JSON.stringify(state));
+    }, [state]);
+
     return (
         <QuizContext.Provider value={{ state, dispatch }}>
             {children}

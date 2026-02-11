@@ -18,15 +18,22 @@ function Quiz() {
     if (time === 0) {
       dispatch({ type: "ANSWER", payload: false })
       reset()
-    } 
+    }    
   }, [time])
+
+  
   // for Progress bar component
+
 
 
   // for question component
   function callback(selectedOption) {
-    dispatch({ type: "ANSWER", payload: selectedOption === question[index].correctAnswer })
+    if (time>0) {
+       dispatch({ type: "ANSWER", payload: selectedOption === question[index].correctAnswer })
+       reset()
+    }
   }
+  // set of questions are end then
   if (index >= question.length) {
     dispatch({ type: "FINISH", payload: true })
     navigate("/result")
@@ -37,7 +44,8 @@ function Quiz() {
     <>
       <TimerRange timeOut={time} />
       <div className='container-fulid p-3'>
-        <ProgressBar />
+        <ProgressBar totalQestion={question.length} />
+         <div className="btn btn-danger mt-3 offset-11">end</div>
         <div className='row'>
           <div className="col-md-12">
             <QuestionCard currentQuestion={question[index]} callback={callback} index={index} />

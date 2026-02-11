@@ -2,6 +2,7 @@ import React from 'react'
 
 const Input = ({name,setName}) => {
     
+    
     return (
         <>
             <div className="input-group flex-nowrap">
@@ -9,7 +10,7 @@ const Input = ({name,setName}) => {
                 <input 
                 type="text"
                 className="form-control" 
-                placeholder="Username" 
+                placeholder="Email" 
                 aria-label="Username" 
                 aria-describedby="addon-wrapping" 
                 name='username'
