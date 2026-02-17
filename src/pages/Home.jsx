@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Input from '../components/Input'
 import Btn from '../components/Btn'
 import { QuizContext } from '../context/QuizContext'
@@ -10,7 +10,7 @@ function Home() {
     const [user, setUser] = useState("")
     const navigate = useNavigate()
     const { dispatch } = useContext(QuizContext)
-    const { time, reset } = useTimer()
+    const { time, reset } = useTimer(45)
 
     const startQuiz = () => {
         if (!user.trim()) return alert(" please enter Email")
@@ -23,7 +23,7 @@ function Home() {
         <div className='container'>
             <div className='row p-3'>
                 <div className='col-md-12 '>
-                    <h1 className='text-info '>I have <span className='text-danger'>fear</span> to take challange ! means you are ready. . . 30s remeaning  </h1>
+                    <h1 className='text-info '>You  <span className='text-danger'>afraid</span> to take challange ! means you are ready. . . {time>0?time + 's remeaning  ':'Page reload'}  </h1>
                 </div>
             </div>
             <div className="row p-3">

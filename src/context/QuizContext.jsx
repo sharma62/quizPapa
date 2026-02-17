@@ -1,58 +1,65 @@
-import { createContext, useEffect, useReducer, useState } from "react";
-import question from '../data/questions.json'
-export const QuizContext = createContext()
+import { createContext, useEffect, useReducer } from "react";
+import question from "../data/questions.json";
+
+export const QuizContext = createContext();
+
 const initialState = {
-    user: '',
-    index: 0,
-    score: 0,
-    completed: false,
-    question: question
-}
+  user: "",
+  index: 0,
+  score: 0,
+  completed: false,
+  question: question,
+};
 
 function quizReducer(state, action) {
-    switch (action.type) {
-        case "SET_NAME":
-            return { ...state, user: (action.payload.trim()) }
-        // ye payload dispatch ke via page send karta  hai
-        case "ANSWER":
-            return {
-                ...state,
-                score: action.payload ? state.score + 1 : state.score,
-                index: state.index + 1,
-            }
-        case "FINISH":
-            return {
-                ...state,
-                completed: action.payload
-            }
-        case "RESET":
-            return {
-                ...initialState,
-                question: state.question
-            }
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case "SET_NAME":
+      return { ...state, user: action.payload.trim() };
+
+    case "ANSWER":
+      return {
+        ...state,
+        score: action.payload ? state.score + 1 : state.score,
+        index: state.index + 1,
+      };
+
+    case "FINISH":
+       return { ...state, completed: action.payload };
+
+    case "RESET":
+      return {
+        ...initialState,
+        question: state.question, // keep questions same
+      };
+
+    default:
+      return state;
+  }
+}
+
+// ✅ Safe function to load localStorage
+function loadFromLocalStorage() {
+  try {
+    const storedData = localStorage.getItem("quizStore");
+    return storedData ? JSON.parse(storedData) : initialState;
+  } catch (error) {
+    console.log("LocalStorage data corrupted, resetting...", error);
+    return initialState;
+  }
 }
 
 export default function QuizProvider({ children }) {
-    //  Load state from localStorage first time
-    const savedData = JSON.parse(localStorage.getItem("quizStore"));
+  // ✅ Best Practice: Reducer initializer function
+  const [state, dispatch] = useReducer(quizReducer, initialState, loadFromLocalStorage);
 
-    const [state, dispatch] = useReducer(
-        quizReducer,
-        savedData ? savedData : initialState
-    );
+  // ✅ Save whenever state changes
+  useEffect(() => {
+    localStorage.setItem("quizStore", JSON.stringify(state));
+  }, [state]);
 
-
-    //  Save state whenever it changes
-    useEffect(() => {
-        localStorage.setItem("quizStore", JSON.stringify(state));
-    }, [state]);
-
-    return (
-        <QuizContext.Provider value={{ state, dispatch }}>
-            {children}
-        </QuizContext.Provider>
-    )
+  return (
+    <QuizContext.Provider value={{ state, dispatch }}>
+      {children}
+    </QuizContext.Provider>
+  );
 }

@@ -1,2 +1,1 @@
-# quizPapa
-A quiz app
+current issue : prev user data fatch and use curr quiz 

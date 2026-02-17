@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 function QuestionCard({ currentQuestion, callback, index }) {
-
+ 
     const [selectedOption, setSelectedOption] = useState("");
     const options = currentQuestion.options
 

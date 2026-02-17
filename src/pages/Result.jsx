@@ -11,6 +11,7 @@ function Result() {
     navigate('/leaderboard')
   }
   const handleHome = () => {
+    localStorage.clear(); 
     navigate('/')
   }
   const handleAi = ()=>{

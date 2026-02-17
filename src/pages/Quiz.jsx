@@ -1,59 +1,88 @@
-import React, { useContext, useEffect } from 'react'
-import TimerRange from '../components/TimerRange'
-import ProgressBar from '../components/ProgressBar'
-import QuestionCard from '../components/QuestionCard'
-import { QuizContext } from '../context/QuizContext'
-import { useNavigate } from 'react-router-dom'
-import { useTimer } from '../hooks/useTimer'
-
+import React, { useContext, useEffect } from "react";
+import TimerRange from "../components/TimerRange";
+import ProgressBar from "../components/ProgressBar";
+import QuestionCard from "../components/QuestionCard";
+import { QuizContext } from "../context/QuizContext";
+import { useNavigate } from "react-router-dom";
+import { useTimer } from "../hooks/useTimer";
 
 function Quiz() {
-  const { state, dispatch } = useContext(QuizContext)
-  const { index, question } = state
-  const navigate = useNavigate()
+  const { state, dispatch } = useContext(QuizContext);
+  const { index, question } = state;
+  const navigate = useNavigate();
 
-  // for timeRange component
-  const { time, reset } = useTimer(15)
+  console.log(state)
+  console.log(question)
+  console.log(index)
+  // Timer hook
+  const { time, reset } = useTimer(15); 
+
+  // ✅ If quiz completed
   useEffect(() => {
-    if (time === 0) {
-      dispatch({ type: "ANSWER", payload: false })
-      reset()
-    }    
-  }, [time])
+    if (index >= question.length) {
+      dispatch({ type: "FINISH", payload: true });
+       navigate("/result");
+    }
+  }, [index, question.length, dispatch, navigate]);
 
-  
-  // for Progress bar component
+  // ✅ Auto move when time is 0
+  useEffect(() => {
+    if (time === 0 && index < question.length) {
+      dispatch({ type: "ANSWER", payload: false }); 
+      reset();
+    }
+  }, [time, index, question.length, dispatch, reset]);
 
-
-
-  // for question component
+  // ✅ Submit Answer
   function callback(selectedOption) {
-    if (time>0) {
-       dispatch({ type: "ANSWER", payload: selectedOption === question[index].correctAnswer })
-       reset()
+    if (time > 0) {
+      dispatch({
+        type: "ANSWER",
+        payload: selectedOption === question[index].correctAnswer,
+      });
+      reset();
     }
   }
-  // set of questions are end then
+
+  // ✅ End Quiz Button
+  function endQuiz() {
+    dispatch({ type: "FINISH", payload: true });
+    navigate("/result");
+    }
+
+  // ✅ Prevent crash if index out of range
   if (index >= question.length) {
-    dispatch({ type: "FINISH", payload: true })
-    navigate("/result")
     return null;
   }
 
   return (
     <>
       <TimerRange timeOut={time} />
-      <div className='container-fulid p-3'>
-        <ProgressBar totalQestion={question.length} />
-         <div className="btn btn-danger mt-3 offset-11">end</div>
-        <div className='row'>
+
+      <div className="container-fluid p-3">
+        {/* Progress Bar */}
+        <ProgressBar totalQuestion={question.length} currentIndex={index} />
+
+        {/* End Quiz Button */}
+        <div className="d-flex justify-content-end mt-3">
+          <button className="btn btn-danger" onClick={endQuiz}>
+            End Quiz
+          </button>
+        </div>
+
+        {/* Question Card */}
+        <div className="row mt-3">
           <div className="col-md-12">
-            <QuestionCard currentQuestion={question[index]} callback={callback} index={index} />
+            <QuestionCard
+              currentQuestion={question[index]}
+              callback={callback}
+              index={index}
+            />
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Quiz
+export default Quiz;
