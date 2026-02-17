@@ -50,7 +50,7 @@ function loadFromLocalStorage() {
 
 export default function QuizProvider({ children }) {
   // ✅ Best Practice: Reducer initializer function
-  const [state, dispatch] = useReducer(quizReducer, initialState, loadFromLocalStorage);
+  const [state, dispatch] = useReducer(quizReducer, initialState);
 
   // ✅ Save whenever state changes
   useEffect(() => {

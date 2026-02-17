@@ -8,24 +8,21 @@ import { useTimer } from "../hooks/useTimer";
 
 function Quiz() {
   const { state, dispatch } = useContext(QuizContext);
-  const { index, question } = state;
+  const { index, question,completed } = state;
   const navigate = useNavigate();
-
-  console.log(state)
-  console.log(question)
-  console.log(index)
+  
   // Timer hook
-  const { time, reset } = useTimer(15); 
+  const { time, reset } = useTimer(15);   
 
   // ✅ If quiz completed
-  useEffect(() => {
-    if (index >= question.length) {
+  useEffect(() => { // issue occur here but what is i dont no
+    if (index >= question.length && !completed) {  
       dispatch({ type: "FINISH", payload: true });
-       navigate("/result");
+       navigate("/result"); 
     }
-  }, [index, question.length, dispatch, navigate]);
+  }, [index, question.length, dispatch, navigate,state.completed]);
 
-  // ✅ Auto move when time is 0
+  // ✅ Auto move when time is 0 (skip)
   useEffect(() => {
     if (time === 0 && index < question.length) {
       dispatch({ type: "ANSWER", payload: false }); 
