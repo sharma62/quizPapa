@@ -5,6 +5,7 @@ import QuestionCard from "../components/QuestionCard";
 import { QuizContext } from "../context/QuizContext";
 import { useNavigate } from "react-router-dom";
 import { useTimer } from "../hooks/useTimer";
+import Btn from "../components/Btn";
 
 function Quiz() {
   const { state, dispatch } = useContext(QuizContext);
@@ -15,7 +16,7 @@ function Quiz() {
   const { time, reset } = useTimer(15);
 
   // ✅ If quiz completed
-  useEffect(() => { // issue occur here but what is i dont no
+  useEffect(() => {
     if (index >= question.length && !completed) {
       dispatch({ type: "FINISH", payload: true });
       navigate("/result");
@@ -64,9 +65,7 @@ function Quiz() {
 
         {/* End Quiz Button */}
         <div className="d-flex justify-content-end mt-3">
-          <button className="btn btn-danger" onClick={endQuiz}>
-            End Quiz
-          </button>
+          <Btn btnName={'end Quiz'} onClick={endQuiz} color="danger" />
         </div>
 
         {/* Question Card */}

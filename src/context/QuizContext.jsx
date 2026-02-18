@@ -24,6 +24,7 @@ function quizReducer(state, action) {
       };
 
     case "FINISH":
+      // here curr user's data save in to databse & fetch in leaderboard for showing compititon
        return { ...state, completed: action.payload };
 
     case "RESET":

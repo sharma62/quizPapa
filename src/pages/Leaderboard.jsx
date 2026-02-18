@@ -11,28 +11,15 @@ function Leaderboard() {
     { id: 4, name: "Priya", score: 5 },
     { id: 5, name: "Suresh", score: 4 },
   ];
+
   const topRankers = top5(leaderboardData)
 
-  // function top51(leaderboardData) {
-  //   console.log("original data:", leaderboardData)
-
-  //   //original data ka copy banya taki original data change na ho ( sort() original data ko change katna h is liye copy bnaya )
-  //   const copiedData = leaderboardData;
-
-  //   copiedData.sort((a, b) => {
-  //     console.log(`a[${a.id}] : ${a.score} vs b[${b.id}] : ${b.score}`)
-  //     return b.score - a.score
-  //   })
-
-  //   return leaderboardData
-  // }
-
   function top5(leaderboardData) {
-    console.log("✅ Original Data:", leaderboardData);
+    console.log("Original Data:", leaderboardData);
 
     // Copy banaya taki original array change na ho
     const copiedData = [...leaderboardData];
-    console.log("📌 Copied Data:", copiedData);
+    console.log("Copied Data:", copiedData);
 
     // Sorting
     copiedData.sort((a, b) => {
@@ -42,17 +29,15 @@ function Leaderboard() {
       return b.score - a.score;
     });
 
-    console.log("🔥 After Sorting (High Score First):", copiedData);
+    console.log("After Sorting (High Score First):", copiedData);
 
     // Top 5 extract
     const top5Students = copiedData.slice(0, 5);
 
-    console.log("🏆 Top 5 Students:", top5Students);
+    console.log("Top 5 Students:", top5Students);
 
     return top5Students;
   }
-
- 
   function onClickToHome() {
     localStorage.clear()
     navigate('/')
@@ -60,6 +45,9 @@ function Leaderboard() {
   function onClickPlayAgain() {
     // same user start quiz Again
     navigate('/')
+  }
+  const handleAi = ()=>{
+    console.log("handle Ai")
   }
   return (
     <div className="container mt-5">
@@ -96,6 +84,7 @@ function Leaderboard() {
             <div className="d-flex justify-content-center gap-3 mt-3">
               <Btn btnName={'Home'} onClick={onClickToHome} color="primary" />
               <Btn btnName={'Play Again'} onClick={onClickPlayAgain} color="warning" />
+              <Btn btnName={'Re-View By Ai'} onClick={handleAi} color="success" />
             </div>
 
           </div>

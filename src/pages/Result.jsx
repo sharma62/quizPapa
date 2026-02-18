@@ -15,7 +15,7 @@ function Result() {
     navigate('/')
   }
   const handleAi = ()=>{
-    
+    console.log("handle Ai ")
   }
   return (
     <div className="container mt-5">
