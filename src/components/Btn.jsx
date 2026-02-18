@@ -4,7 +4,7 @@ function Btn({btnName,onClick,color="primary"}) {
 
   return (
     <div>
-      <button className={`btn btn-${color} p-2`} onClick={onClick}>{btnName}</button>
+      <button className={`btn btn-${color} px-4`} onClick={onClick}>{btnName}</button>
     </div>
   )
 }

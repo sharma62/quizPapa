@@ -8,24 +8,24 @@ import { useTimer } from "../hooks/useTimer";
 
 function Quiz() {
   const { state, dispatch } = useContext(QuizContext);
-  const { index, question,completed } = state;
+  const { index, question, completed } = state;
   const navigate = useNavigate();
-  
+  console.log(index)
   // Timer hook
-  const { time, reset } = useTimer(15);   
+  const { time, reset } = useTimer(15);
 
   // ✅ If quiz completed
   useEffect(() => { // issue occur here but what is i dont no
-    if (index >= question.length && !completed) {  
+    if (index >= question.length && !completed) {
       dispatch({ type: "FINISH", payload: true });
-       navigate("/result"); 
+      navigate("/result");
     }
-  }, [index, question.length, dispatch, navigate,state.completed]);
+  }, [index, question.length, dispatch, navigate, state.completed]);
 
   // ✅ Auto move when time is 0 (skip)
   useEffect(() => {
     if (time === 0 && index < question.length) {
-      dispatch({ type: "ANSWER", payload: false }); 
+      dispatch({ type: "ANSWER", payload: false });
       reset();
     }
   }, [time, index, question.length, dispatch, reset]);
@@ -43,9 +43,11 @@ function Quiz() {
 
   // ✅ End Quiz Button
   function endQuiz() {
-    dispatch({ type: "FINISH", payload: true });
-    navigate("/result");
+    if (alert("Are you sure to end the quiz")) {
+      dispatch({ type: "FINISH", payload: true });
+      navigate("/result");
     }
+  }
 
   // ✅ Prevent crash if index out of range
   if (index >= question.length) {
@@ -58,7 +60,7 @@ function Quiz() {
 
       <div className="container-fluid p-3">
         {/* Progress Bar */}
-        <ProgressBar totalQuestion={question.length} currentIndex={index} />
+        <ProgressBar totalQestion={question.length} currIdx={index} />
 
         {/* End Quiz Button */}
         <div className="d-flex justify-content-end mt-3">
